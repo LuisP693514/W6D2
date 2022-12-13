@@ -2,21 +2,39 @@ require_relative 'db_connection'
 require 'active_support/inflector'
 # NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
 # of this project. It was only a warm up.
-
 class SQLObject
+  
   def self.columns
-    # ...
+
   end
 
   def self.finalize!
+
   end
 
   def self.table_name=(table_name)
-    # ...
+    @@table_name = table_name
   end
 
   def self.table_name
-    # ...
+    @@table_name = self.make_method(self.to_s)
+  end
+
+  def self.make_method(word)
+
+  indeces = []
+  str = word
+  str.each_char.with_index {|c, i| indeces << i if c == c.upcase}
+  indeces.delete(0) if indeces.include?(0)
+
+  until indeces.empty?
+    str.insert(indeces.shift, "_")
+  end
+
+  str += "s" if str[-1] != "s"
+
+  return str.downcase
+
   end
 
   def self.all
